@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Variants } from "framer-motion";
 
 // ─── Typewriter ───────────────────────────────────────────────────────────────
 const SEGMENTS = [
@@ -120,11 +121,11 @@ async function handleSubmit() {
   const fieldErr = (k: keyof FormState) =>
     errors[k] ? <span className="font-mono text-[10px] text-red-400">{errors[k]}</span> : null;
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden:   {},
     visible:  { transition: { staggerChildren: 0.1 } },
   };
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden:   { opacity: 0, y: 16 },
     visible:  { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
   };
