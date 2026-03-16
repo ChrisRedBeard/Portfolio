@@ -4,7 +4,7 @@
 // ============================================
 // Usa SpotlightCard di React Bits per le card interattive.
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { projects } from "@/data/projects";
 import SpotlightCard from "@/directives/components/ui/SpotlightCard";
 
@@ -27,12 +27,12 @@ function ExternalLinkIcon() {
   );
 }
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.12 } },
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden:  { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };

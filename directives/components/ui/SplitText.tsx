@@ -4,10 +4,11 @@
 // ============================================
 // React Bits — anima ogni carattere del testo in entrata.
 
-import { motion, Variants } from "framer-motion";
+import { motion , type TargetAndTransition} from "framer-motion";
+import { Variants } from "framer-motion";
 
 interface SplitTextProps {
-  text: string;
+  text: string; 
   className?: string;
   delay?: number;
   duration?: number;
@@ -48,8 +49,8 @@ export default function SplitText({
           <motion.span
             key={token.key}
             className="inline-block"
-            initial={from as Variants}
-            animate={to as Variants}
+            initial={from as TargetAndTransition}
+            animate={to as TargetAndTransition}
             transition={{
               duration,
               delay: i * (delay / 1000),

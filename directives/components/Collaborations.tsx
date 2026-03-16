@@ -16,7 +16,7 @@
 //   • Marquee    → components/ui/Marquee.tsx
 //   • TiltCard   → components/ui/TiltCard.tsx
 
-import { motion } from "framer-motion";
+import { motion,Variants } from "framer-motion";
 import { collaborations, CollaborationType } from "@/data/collaborations";
 import Marquee   from "@/directives/components/ui/Marquee";
 import TiltCard  from "@/directives/components/ui/TiltCard";
@@ -68,12 +68,12 @@ function ActiveBadge({ active }: { active: boolean }) {
 }
 
 // ── Varianti animazione griglia ────────────────────────────────────
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-const cardVariants = {
+const cardVariants:  Variants= {
   hidden:  { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
 };

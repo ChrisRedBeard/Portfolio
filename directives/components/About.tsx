@@ -3,7 +3,7 @@
 // components/About.tsx
 // ============================================
 
-import { motion } from "framer-motion";
+import { motion,Variants } from "framer-motion";
 import { StatCard } from "@/types";
 
 
@@ -14,12 +14,12 @@ const STATS: StatCard[] = [
   { value: "∞",  label: "Curiosità",  sub: "verso il codice"    },
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden:  { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };

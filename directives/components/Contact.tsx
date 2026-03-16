@@ -44,7 +44,7 @@ function TypewriterHeading() {
 }
 
 // ─── Info row ─────────────────────────────────────────────────────────────────
-function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | React.ReactNode; }) {
   return (
     <div className="flex items-center gap-3">
       <div className="w-8 h-8 rounded-md border border-[#1a2332] bg-[#060810] flex items-center justify-center flex-shrink-0 text-cyan-400">
