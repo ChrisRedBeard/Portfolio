@@ -42,7 +42,7 @@ function TypewriterHeading() {
     </h2>
   );
 }
-
+// risolto problema
 // ─── Info row ─────────────────────────────────────────────────────────────────
 function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | React.ReactNode; }) {
   return (
