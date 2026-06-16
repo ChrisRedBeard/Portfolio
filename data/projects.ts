@@ -44,18 +44,8 @@ export const projects: Project[] = [
     description:
       "Questo sito! Costruito con React, Next.js e Tailwind CSS. Integra componenti animati da React Bits per un'esperienza visiva unica.",
     tech: ["React", "Next.js", "Tailwind", "Framer Motion"],
-    github: "https://github.com/tuousername/portfolio",
-    demo: "https://tuousername.vercel.app",
-    featured: true,
-  },
-  {
-    id: 5,
-    title: "Algoritmi & Strutture Dati",
-    description:
-      "Repository con implementazioni in Python e Java dei principali algoritmi di ordinamento, ricerca e strutture dati studiate all'università.",
-    tech: ["Python", "Java", "Algorithms"],
-    github: "https://github.com/tuousername/algorithms",
+    github: "https://github.com/ChrisRedBeard/Portfolio",
     demo: null,
-    featured: false,
+    featured: true,
   },
 ];
