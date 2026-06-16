@@ -27,10 +27,9 @@ function useTypewriter(speed = 110) {
 
 function TypewriterHeading() {
   const len = useTypewriter();
-  let pos = 0;
-  const spans = SEGMENTS.map(({ text, color }) => {
+  const spans = SEGMENTS.map(({ text, color }, i) => {
+    const pos = SEGMENTS.slice(0, i).reduce((acc, s) => acc + s.text.length, 0);
     const visible = Math.max(0, Math.min(text.length, len - pos));
-    pos += text.length;
     return visible > 0
       ? <span key={text} className={color}>{text.slice(0, visible)}</span>
       : null;

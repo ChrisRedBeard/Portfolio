@@ -118,7 +118,7 @@ export default function Skills() {
           {/* Hard Skills */}
           <div>
             <h3 className="text-base font-semibold text-white mb-5 flex items-center gap-2 font-mono">
-              <span className="text-cyan-400">//</span> Hard Skills
+              <span className="text-cyan-400">{"//"}</span> Hard Skills
             </h3>
             {hardSkills.map((skill, i) => (
               <HardSkillRow key={skill.name} skill={skill} delay={i * 0.05} />
@@ -155,7 +155,7 @@ export default function Skills() {
             </div>
 
             <h3 className="text-base font-semibold text-white mb-5 flex items-center gap-2 font-mono">
-              <span className="text-green-400">//</span> Soft & Additional Skills
+              <span className="text-green-400">{"//"}</span> Soft & Additional Skills
             </h3>
             <div className="grid grid-cols-2 gap-2">
               {softSkills.map((skill, i) => (

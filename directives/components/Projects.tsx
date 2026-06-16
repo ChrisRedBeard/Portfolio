@@ -105,7 +105,7 @@ export default function Projects() {
 
                   <div className="flex flex-wrap gap-2">
                     {project.tech.map((t) => (
-                      <span key={t} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-black-400/5 border border-white-400/15 text-cyan-400/80">
+                      <span key={t} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-cyan-400/5 border border-cyan-400/15 text-cyan-400/80">
                         {t}
                       </span>
                     ))}
