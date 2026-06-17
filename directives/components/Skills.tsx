@@ -3,31 +3,31 @@
 // components/Skills.tsx
 // ============================================
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Brain } from "lucide-react";
 import { hardSkills, softSkills } from "@/data/skills";
-import { HardSkill } from "@/types";
+import { HardSkill, SoftSkill } from "@/types";
 
 type Category = HardSkill["category"];
 
-const CATEGORY_COLORS: Record<Category, { bg: string; border: string; color: string }> = {
-  Linguaggio: { bg: "rgba(0,229,255,0.06)",   border: "rgba(0,229,255,0.2)",   color: "#00e5ff" },
-  Framework:  { bg: "rgba(0,255,136,0.06)",   border: "rgba(0,255,136,0.2)",   color: "#00ff88" },
-  Database:   { bg: "rgba(167,139,250,0.06)", border: "rgba(167,139,250,0.2)", color: "#a78bfa" },
-  Tool:       { bg: "rgba(251,146,60,0.06)",  border: "rgba(251,146,60,0.2)",  color: "#fb923c" },
+const CATEGORY_LABEL: Record<Category, string> = {
+  Linguaggio: "Linguaggio",
+  Framework:  "Framework",
+  Database:   "Database",
+  Tool:       "Strumento",
 };
 
+// ─── Indicatore livello (5 tacche) ──────────────────────────────────────────
 function SkillBar({ level, inView }: { level: number; inView: boolean }) {
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-1" aria-label={`Livello ${level} su 5`}>
       {[1, 2, 3, 4, 5].map((i) => (
-        <motion.div
+        <motion.span
           key={i}
-          className={`h-1.5 w-5 rounded-full ${i <= level ? "bg-primary" : "bg-line"}`}
+          className={`h-1 w-3.5 rounded-full ${i <= level ? "bg-primary" : "bg-line"}`}
           initial={{ scaleX: 0 }}
           animate={{ scaleX: inView ? 1 : 0 }}
-          transition={{ duration: 0.35, delay: inView ? i * 0.07 : 0 }}
+          transition={{ duration: 0.35, delay: inView ? i * 0.05 : 0 }}
           style={{ transformOrigin: "left" }}
         />
       ))}
@@ -35,72 +35,71 @@ function SkillBar({ level, inView }: { level: number; inView: boolean }) {
   );
 }
 
-function HardSkillRow({ skill, delay }: { skill: HardSkill; delay: number }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-  const colors = CATEGORY_COLORS[skill.category];
-
+// ─── Card hard skill (con logo del brand) ───────────────────────────────────
+function HardSkillCard({ skill, delay, inView }: { skill: HardSkill; delay: number; inView: boolean }) {
+  const Icon = skill.icon;
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay }}
-      className="flex items-center justify-between p-4 rounded-xl border border-line
-                 bg-canvas hover:border-primary/20 transition-colors group cursor-default mb-2"
+      initial={{ opacity: 0, y: 16 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.45, delay }}
+      whileHover={{ y: -4 }}
+      className="group relative flex flex-col items-center text-center gap-3 p-5 rounded-xl
+                 border border-line bg-canvas overflow-hidden transition-colors hover:border-primary/30"
     >
-      <div className="flex items-center gap-3">
-        <span
-          className="font-mono text-[11px] px-2 py-0.5 rounded border"
-          style={{ background: colors.bg, borderColor: colors.border, color: colors.color }}
-        >
-          {skill.category}
-        </span>
-        <span className="font-medium text-white group-hover:text-primary transition-colors text-sm font-mono">
-          {skill.name}
-        </span>
+      {/* glow nel colore del brand all'hover */}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{ background: `radial-gradient(circle at 50% 0%, ${skill.color}1f, transparent 70%)` }}
+        aria-hidden="true"
+      />
+      <Icon
+        className="relative text-4xl transition-transform duration-300 group-hover:scale-110"
+        style={{ color: skill.color }}
+      />
+      <div className="relative">
+        <p className="text-sm font-medium text-white">{skill.name}</p>
+        <p className="font-mono text-[10px] uppercase tracking-[1px] text-faint mt-0.5">
+          {CATEGORY_LABEL[skill.category]}
+        </p>
       </div>
-      <SkillBar level={skill.level} inView={isInView} />
+      <SkillBar level={skill.level} inView={inView} />
     </motion.div>
   );
 }
 
-function SoftSkillCard({ skill, delay }: { skill: { name: string; icon: string }; delay: number }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-
+// ─── Card soft skill ────────────────────────────────────────────────────────
+function SoftSkillCard({ skill, delay, inView }: { skill: SoftSkill; delay: number; inView: boolean }) {
+  const Icon = skill.icon;
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay }}
-      whileHover={{ scale: 1.03 }}
-      className="flex items-center gap-3 p-4 rounded-xl border border-line
+      initial={{ opacity: 0, y: 12 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.45, delay }}
+      className="flex items-center gap-3 p-3.5 rounded-xl border border-line
                  bg-canvas cursor-default hover:border-secondary/30 transition-colors"
     >
-      <span className="text-xl leading-none">{skill.icon}</span>
-      <span className="text-sm text-muted font-mono">{skill.name}</span>
+      <Icon className="w-4 h-4 text-secondary shrink-0" strokeWidth={1.75} />
+      <span className="text-sm text-muted">{skill.name}</span>
     </motion.div>
   );
 }
 
 export default function Skills() {
-  const titleRef = useRef(null);
-  const titleInView = useInView(titleRef, { once: true });
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
     <section id="skills" className="py-28 bg-surface">
-      <div className="max-w-5xl mx-auto px-6">
+      <div className="max-w-5xl mx-auto px-6" ref={ref}>
 
         {/* top divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent mb-16" />
 
         {/* Section title */}
         <motion.div
-          ref={titleRef}
           initial={{ opacity: 0, y: 20 }}
-          animate={titleInView ? { opacity: 1, y: 0 } : {}}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="mb-14"
         >
@@ -110,61 +109,36 @@ export default function Skills() {
             </span>
             Skills
           </h2>
+          <p className="text-muted text-base max-w-lg mt-4">
+            Lo stack con cui progetto, scrivo e mantengo software — più le competenze
+            trasversali che uso ogni giorno in team.
+          </p>
         </motion.div>
 
-        {/* Two-column grid */}
-        <div className="grid lg:grid-cols-[1fr_auto_1fr] gap-10 lg:gap-14 items-start">
-
-          {/* Hard Skills */}
-          <div>
-            <h3 className="text-base font-semibold text-white mb-5 flex items-center gap-2 font-mono">
-              <span className="text-primary">{"//"}</span> Hard Skills
-            </h3>
+        {/* ── Hard skills: griglia di card con logo ── */}
+        <div className="mb-14">
+          <h3 className="text-xs font-mono uppercase tracking-[2px] text-faint mb-6">
+            Stack tecnico
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {hardSkills.map((skill, i) => (
-              <HardSkillRow key={skill.name} skill={skill} delay={i * 0.05} />
+              <HardSkillCard key={skill.name} skill={skill} inView={inView} delay={i * 0.06} />
             ))}
           </div>
-
-          {/* Brain icon — center pivot */}
-          <div className="hidden lg:flex flex-col items-center justify-start pt-50">
-            <div className="relative flex items-center justify-center w-40 h-40">
-              <motion.div
-                animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.1, 1] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-0 rounded-full"
-                style={{ background: "radial-gradient(circle, rgba(34,211,238,0.15), transparent 70%)" }}
-              />
-              <div className="absolute inset-[-4px] rounded-full border border-primary/20" />
-              <Brain size={70} strokeWidth={1.25} className="text-primary relative z-10" />
-            </div>
-          </div>
-
-          {/* Soft Skills */}
-          <div>
-            {/* Brain icon on mobile */}
-            <div className="flex lg:hidden justify-center py-6">
-              <div className="relative flex items-center justify-center w-20 h-20">
-                <motion.div
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="absolute inset-0 rounded-full"
-                  style={{ background: "radial-gradient(circle, rgba(34,211,238,0.12), transparent 70%)" }}
-                />
-                <Brain size={70} strokeWidth={1.25} className="text-primary relative z-10" />
-              </div>
-            </div>
-
-            <h3 className="text-base font-semibold text-white mb-5 flex items-center gap-2 font-mono">
-              <span className="text-secondary">{"//"}</span> Soft & Additional Skills
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
-              {softSkills.map((skill, i) => (
-                <SoftSkillCard key={skill.name} skill={skill} delay={i * 0.04} />
-              ))}
-            </div>
-          </div>
-
         </div>
+
+        {/* ── Soft skills ── */}
+        <div>
+          <h3 className="text-xs font-mono uppercase tracking-[2px] text-faint mb-6">
+            Competenze trasversali
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+            {softSkills.map((skill, i) => (
+              <SoftSkillCard key={skill.name} skill={skill} inView={inView} delay={i * 0.04} />
+            ))}
+          </div>
+        </div>
+
       </div>
     </section>
   );
