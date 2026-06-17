@@ -26,13 +26,13 @@ const itemVariants: Variants = {
 
 export default function About() {
   return (
-    <section id="about" className="py-28 bg-[#060810]">
+    <section id="about" className="py-28 bg-canvas">
       <div className="max-w-6xl mx-auto px-6">
 
         {/* Divider */}
       
       
-        <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent mb-16" />
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent mb-16" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -42,9 +42,9 @@ export default function About() {
         >
          
       
-  <h2 className="relative font-mono text-4xl md:text-5xl text-white">
+  <h2 className="relative font-display text-3xl sm:text-4xl md:text-5xl text-white">
       
-       <span className=" bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+       <span className=" bg-gradient-to-r from-primary to-cyan-300 bg-clip-text text-transparent">
        01/
     </span>About Me
  
@@ -68,14 +68,14 @@ export default function About() {
               <>Sono una persona <span className="text-white font-medium">curiosa, metodica e orientata ai risultati</span>.<br></br>Se non mi trovi al pc sono in palestra.</>,
               
             ].map((text, i) => (
-              <motion.p key={i}  className="text-[#8b949e] text-base md:text-lg leading-relaxed">
+              <motion.p key={i}  className="text-muted text-base md:text-lg leading-relaxed">
                 {text}
               </motion.p>
             ))}
 
             <motion.div  className="flex flex-wrap gap-2 pt-2">
               {["Università", "Interessi","Curiosità"].map((tag) => (
-                <span key={tag} className="font-mono text-xs px-3 py-1 rounded-md bg-cyan-400/5 border border-cyan-400/15 text-cyan-400/80">
+                <span key={tag} className="font-mono text-xs px-3 py-1 rounded-md bg-primary/5 border border-primary/15 text-primary/80">
                   {tag}
                 </span>
               ))}
@@ -93,13 +93,13 @@ export default function About() {
             {STATS.map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-2xl border border-[#1a2332] bg-[#0d1117] p-5 flex flex-col gap-1 hover:border-cyan-400/20 transition-colors"
+                className="rounded-2xl border border-line bg-surface p-5 flex flex-col gap-1 hover:border-primary/20 transition-colors"
               >
-                <span className="font-bold text-3xl bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">
+                <span className="font-bold text-3xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                   {stat.value}
                 </span>
                 <span className="font-medium text-white text-sm">{stat.label}</span>
-                <span className="text-[#3d444d] text-xs">{stat.sub}</span>
+                <span className="text-faint text-xs">{stat.sub}</span>
               </div>
             ))}
           </motion.div>

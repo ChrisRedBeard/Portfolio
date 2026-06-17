@@ -48,7 +48,7 @@ function  LinkIcon() {
 function ActiveBadge({ active }: { active: boolean }) {
   return (
     <span
-      className="inline-flex items-center gap-1.5 font-mono text-[10px] px-2 py-0.5 rounded-full border"
+      className="inline-flex items-center gap-1.5 font-mono text-[11px] px-2 py-0.5 rounded-full border"
       style={{
         background: active ? "rgba(0,255,136,0.08)" : "rgba(100,100,100,0.08)",
         borderColor: active ? "rgba(0,255,136,0.25)" : "rgba(100,100,100,0.2)",
@@ -83,7 +83,7 @@ export default function Collaborations() {
   const activeCollab = collaborations.filter((c) => c.active);
 
   return (
-    <section id="collaborations" className="py-28 bg-[#060810] relative overflow-hidden">
+    <section id="collaborations" className="py-28 bg-surface relative overflow-hidden">
 
       {/* Sfondo decorativo: griglia punteggiata sottile */}
       <div
@@ -98,7 +98,7 @@ export default function Collaborations() {
       <div className="max-w-6xl mx-auto px-6 relative z-10">
 
         {/* ── Divider + Header ── */}
-        <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent mb-16" />
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent mb-16" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -108,14 +108,14 @@ export default function Collaborations() {
           className="mb-14"
         >
 
-  <h2 className="relative font-mono text-4xl md:text-5xl text-white">
+  <h2 className="relative font-display text-3xl sm:text-4xl md:text-5xl text-white break-words">
       
-       <span className=" bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+       <span className=" bg-gradient-to-r from-primary to-cyan-300 bg-clip-text text-transparent">
        04/
     </span>Collaborazioni
  
   </h2>
-          <p className="text-[#8b949e] text-base max-w-lg">
+          <p className="text-muted text-base max-w-lg pt-5">
             Team, community open-source e gruppi di ricerca con cui lavoro
             o ho collaborato. Ogni esperienza mi ha reso uno sviluppatore migliore.
           </p>
@@ -146,10 +146,10 @@ export default function Collaborations() {
               <motion.div key={collab.id}>
                 {/* Numero riga decorativo */}
                 <div className="flex items-center gap-3 mb-2 pl-1">
-                  <span className="font-mono text-[10px] text-[#3d444d]">
+                  <span className="font-mono text-[11px] text-faint">
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <div className="h-px flex-1 bg-[#1a2332]" />
+                  <div className="h-px flex-1 bg-line" />
                 </div>
 
                 {/* ── TiltCard wrapper (React Bits) ── */}
@@ -185,7 +185,7 @@ export default function Collaborations() {
 
                         {/* Badge tipo */}
                         <span
-                          className="font-mono text-[10px] px-2 py-0.5 rounded border inline-block"
+                          className="font-mono text-[11px] px-2 py-0.5 rounded border inline-block"
                           style={{
                             background: style.bg,
                             borderColor: style.border,
@@ -206,11 +206,11 @@ export default function Collaborations() {
                     <div className="flex flex-col gap-3 p-5 md:p-6 flex-1 justify-center">
                       {/* Ruolo */}
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-mono text-[10px] text-[#3d444d] uppercase tracking-widest">
+                        <span className="font-mono text-[11px] text-faint uppercase tracking-widest">
                           ruolo
                         </span>
                         <span
-                          className="font-semibold text-sm text-cyan-400"
+                          className="font-semibold text-sm text-primary"
                          
                         >
                           {collab.role}
@@ -218,7 +218,7 @@ export default function Collaborations() {
                       </div>
 
                       {/* Descrizione */}
-                      <p className="text-[#8b949e] text-sm leading-relaxed">
+                      <p className="text-muted text-sm leading-relaxed">
                         {collab.description}
                       </p>
 
@@ -228,7 +228,7 @@ export default function Collaborations() {
                           href={collab.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 font-mono text-xs text-[#3d444d] hover:text-cyan-400 transition-colors w-fit"
+                          className="inline-flex items-center gap-1.5 font-mono text-xs text-faint hover:text-primary transition-colors w-fit"
                         >
                           <LinkIcon />
                           <u>Visita il progetto</u>
@@ -248,7 +248,7 @@ export default function Collaborations() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6 }}
-          className="mt-8 text-center font-mono text-xs text-[#3d444d]"
+          className="mt-8 text-center font-mono text-xs text-faint"
         >
           {collaborations.filter((c) => c.active).length} collaborazioni attive ·{" "}
           {collaborations.length} totali

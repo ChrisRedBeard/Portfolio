@@ -24,7 +24,7 @@ function SkillBar({ level, inView }: { level: number; inView: boolean }) {
       {[1, 2, 3, 4, 5].map((i) => (
         <motion.div
           key={i}
-          className={`h-1.5 w-5 rounded-full ${i <= level ? "bg-cyan-400" : "bg-[#1a2332]"}`}
+          className={`h-1.5 w-5 rounded-full ${i <= level ? "bg-primary" : "bg-line"}`}
           initial={{ scaleX: 0 }}
           animate={{ scaleX: inView ? 1 : 0 }}
           transition={{ duration: 0.35, delay: inView ? i * 0.07 : 0 }}
@@ -46,17 +46,17 @@ function HardSkillRow({ skill, delay }: { skill: HardSkill; delay: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay }}
-      className="flex items-center justify-between p-4 rounded-xl border border-[#1a2332]
-                 bg-[#060810] hover:border-cyan-400/20 transition-colors group cursor-default mb-2"
+      className="flex items-center justify-between p-4 rounded-xl border border-line
+                 bg-canvas hover:border-primary/20 transition-colors group cursor-default mb-2"
     >
       <div className="flex items-center gap-3">
         <span
-          className="font-mono text-[10px] px-2 py-0.5 rounded border"
+          className="font-mono text-[11px] px-2 py-0.5 rounded border"
           style={{ background: colors.bg, borderColor: colors.border, color: colors.color }}
         >
           {skill.category}
         </span>
-        <span className="font-medium text-white group-hover:text-cyan-400 transition-colors text-sm font-mono">
+        <span className="font-medium text-white group-hover:text-primary transition-colors text-sm font-mono">
           {skill.name}
         </span>
       </div>
@@ -76,11 +76,11 @@ function SoftSkillCard({ skill, delay }: { skill: { name: string; icon: string }
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay }}
       whileHover={{ scale: 1.03 }}
-      className="flex items-center gap-3 p-4 rounded-xl border border-[#1a2332]
-                 bg-[#060810] cursor-default hover:border-green-400/30 transition-colors"
+      className="flex items-center gap-3 p-4 rounded-xl border border-line
+                 bg-canvas cursor-default hover:border-secondary/30 transition-colors"
     >
       <span className="text-xl leading-none">{skill.icon}</span>
-      <span className="text-sm text-[#8b949e] font-mono">{skill.name}</span>
+      <span className="text-sm text-muted font-mono">{skill.name}</span>
     </motion.div>
   );
 }
@@ -90,11 +90,11 @@ export default function Skills() {
   const titleInView = useInView(titleRef, { once: true });
 
   return (
-    <section id="skills" className="py-28 bg-[#060810]">
+    <section id="skills" className="py-28 bg-surface">
       <div className="max-w-5xl mx-auto px-6">
 
         {/* top divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent mb-16" />
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent mb-16" />
 
         {/* Section title */}
         <motion.div
@@ -104,8 +104,8 @@ export default function Skills() {
           transition={{ duration: 0.6 }}
           className="mb-14"
         >
-          <h2 className="font-mono text-4xl md:text-5xl text-white">
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-white">
+            <span className="bg-gradient-to-r from-primary to-cyan-300 bg-clip-text text-transparent">
               02/
             </span>
             Skills
@@ -118,7 +118,7 @@ export default function Skills() {
           {/* Hard Skills */}
           <div>
             <h3 className="text-base font-semibold text-white mb-5 flex items-center gap-2 font-mono">
-              <span className="text-cyan-400">{"//"}</span> Hard Skills
+              <span className="text-primary">{"//"}</span> Hard Skills
             </h3>
             {hardSkills.map((skill, i) => (
               <HardSkillRow key={skill.name} skill={skill} delay={i * 0.05} />
@@ -134,8 +134,8 @@ export default function Skills() {
                 className="absolute inset-0 rounded-full"
                 style={{ background: "radial-gradient(circle, rgba(34,211,238,0.15), transparent 70%)" }}
               />
-              <div className="absolute inset-[-4px] rounded-full border border-cyan-400/20" />
-              <Brain size={70} strokeWidth={1.25} className="text-cyan-400 relative z-10" />
+              <div className="absolute inset-[-4px] rounded-full border border-primary/20" />
+              <Brain size={70} strokeWidth={1.25} className="text-primary relative z-10" />
             </div>
           </div>
 
@@ -150,12 +150,12 @@ export default function Skills() {
                   className="absolute inset-0 rounded-full"
                   style={{ background: "radial-gradient(circle, rgba(34,211,238,0.12), transparent 70%)" }}
                 />
-                <Brain size={70} strokeWidth={1.25} className="text-cyan-400 relative z-10" />
+                <Brain size={70} strokeWidth={1.25} className="text-primary relative z-10" />
               </div>
             </div>
 
             <h3 className="text-base font-semibold text-white mb-5 flex items-center gap-2 font-mono">
-              <span className="text-green-400">{"//"}</span> Soft & Additional Skills
+              <span className="text-secondary">{"//"}</span> Soft & Additional Skills
             </h3>
             <div className="grid grid-cols-2 gap-2">
               {softSkills.map((skill, i) => (
