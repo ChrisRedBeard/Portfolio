@@ -18,11 +18,13 @@ export interface HardSkill {
   name: string;
   level: 1 | 2 | 3 | 4 | 5;
   category: "Linguaggio" | "Framework" | "Database" | "Tool";
+  icon: import("react-icons").IconType;
+  color: string;
 }
 
 export interface SoftSkill {
   name: string;
-  icon: string;
+  icon: import("lucide-react").LucideIcon;
 }
 
 export interface StatCard {
