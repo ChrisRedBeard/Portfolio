@@ -61,8 +61,8 @@ const SOCIAL_LINKS = [
 function StatusDot() {
   return (
     <span className="relative inline-flex h-[7px] w-[7px]">
-      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-50" />
-      <span className="relative inline-flex rounded-full h-[7px] w-[7px] bg-green-400" />
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-50" />
+      <span className="relative inline-flex rounded-full h-[7px] w-[7px] bg-secondary" />
     </span>
   );
 }
@@ -76,9 +76,9 @@ function SocialBtn({ href, label, icon }: { href: string; label: string; icon: R
       rel="noopener noreferrer"
       aria-label={label}
       className="
-        w-[38px] h-[38px] rounded-lg border border-[#1a2332] bg-[#060810]
-        flex items-center justify-center text-[#8b949e]
-        hover:border-cyan-400/30 hover:bg-cyan-400/5 hover:text-cyan-400
+        w-11 h-11 rounded-lg border border-line bg-canvas
+        flex items-center justify-center text-muted
+        hover:border-primary/30 hover:bg-primary/5 hover:text-primary
         transition-all duration-200
       "
     >
@@ -92,10 +92,10 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0d1117] pt-16 pb-8 font-mono">
+    <footer className="bg-surface pt-16 pb-8 font-mono">
       {/* divider coerente con Skills */}
       <div className="max-w-6xl mx-auto px-6">
-        <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent mb-14" />
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent mb-14" />
       </div>
 
       <div className="max-w-6xl mx-auto px-6">
@@ -112,12 +112,12 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h2 className="text-white text-2xl md:text-3xl tracking-tight mb-3">
-              <span className="text-cyan-400">&lt;</span>ChrisDev
-              <span className="text-cyan-400">/&gt;</span>
+              <span className="text-primary">&lt;</span>ChrisDev
+              <span className="text-primary">/&gt;</span>
             </h2>
 
           
-            <p className="text-[#8b949e] text-xs leading-relaxed max-w-[260px]">
+            <p className="text-muted text-xs leading-relaxed max-w-[260px]">
               Full-stack developer appassionato di interfacce performanti e codice pulito.
               Disponibile per collaborazioni e nuovi progetti.
             </p>
@@ -125,7 +125,7 @@ export default function Footer() {
 
           {/* Navigazione */}
           <div>
-            <p className="text-[10px] text-cyan-400 tracking-[1.5px] uppercase mb-5">
+            <p className="text-[11px] text-primary tracking-[1.5px] uppercase mb-5">
               navigazione
             </p>
             <nav className="flex flex-col gap-2.5">
@@ -133,7 +133,7 @@ export default function Footer() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-[13px] text-[#8b949e] hover:text-cyan-400 transition-colors duration-200"
+                  className="text-[13px] text-muted hover:text-primary transition-colors duration-200"
                 >
                   {link.label}
                 </a>
@@ -143,11 +143,11 @@ export default function Footer() {
 
           {/* Contatti + Social */}
           <div>
-            <p className="text-[10px] text-cyan-400 tracking-[1.5px] uppercase mb-5">
+            <p className="text-[11px] text-primary tracking-[1.5px] uppercase mb-5">
               contatti
             </p>
-            <p className="text-[13px] text-[#8b949e] mb-1">chrisredbeard21@gmail.com</p>
-            <p className="text-[13px] text-[#8b949e] mb-5">Bari, Italia</p>
+            <p className="text-[13px] text-muted mb-1">chrisredbeard21@gmail.com</p>
+            <p className="text-[13px] text-muted mb-5">Bari, Italia</p>
 
 
             {/* Social icons */}
@@ -160,14 +160,14 @@ export default function Footer() {
         </motion.div>
 
         {/* ── Bottom bar ── */}
-        <div className="h-px bg-[#1a2332] mb-6" />
+        <div className="h-px bg-line mb-6" />
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[11px] text-[#3d4a5c]">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[11px] text-faint">
           <span>
-            © {year} <span className="text-cyan-400">&lt;Chrisdev/&gt;</span> — tutti i diritti riservati
+            © {year} <span className="text-primary">&lt;Chrisdev/&gt;</span> — tutti i diritti riservati
           </span>
           <span className="flex items-center gap-1.5">
-            fatto con <span className="text-green-400">♥</span>,caffè e ghisa — Bari
+            fatto con <span className="text-secondary">♥</span>,caffè e ghisa — Bari
           </span>
         </div>
 

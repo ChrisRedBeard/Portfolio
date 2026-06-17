@@ -9,7 +9,7 @@ import { Variants } from "framer-motion";
 
 // ─── Typewriter ───────────────────────────────────────────────────────────────
 const SEGMENTS = [
-  { text: "// parliamoci", color: "text-cyan-400" },
+  { text: "// parliamoci", color: "text-primary" },
   { text: ".",              color: "text-white"    },
 ] as const;
 
@@ -37,7 +37,7 @@ function TypewriterHeading() {
   return (
     <h2 className="font-mono text-3xl md:text-4xl text-white tracking-tight leading-tight min-h-[48px] mb-4">
       {spans}
-      <span className="text-cyan-400 animate-[blink_.7s_step-end_infinite]">▮</span>
+      <span className="text-primary animate-[blink_.7s_step-end_infinite]">▮</span>
     </h2>
   );
 }
@@ -46,12 +46,12 @@ function TypewriterHeading() {
 function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | React.ReactNode; }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="w-8 h-8 rounded-md border border-[#1a2332] bg-[#060810] flex items-center justify-center flex-shrink-0 text-cyan-400">
+      <div className="w-8 h-8 rounded-md border border-line bg-surface flex items-center justify-center flex-shrink-0 text-primary">
         {icon}
       </div>
       <div>
-        <p className="font-mono text-[9px] text-[#3d4a5c] tracking-[1px] uppercase mb-0.5">{label}</p>
-        <p className="font-mono text-xs text-[#8b949e]">{value}</p>
+        <p className="font-mono text-[11px] text-faint tracking-[1px] uppercase mb-0.5">{label}</p>
+        <p className="font-mono text-xs text-muted">{value}</p>
       </div>
     </div>
   );
@@ -115,10 +115,10 @@ async function handleSubmit() {
 }
 
   const inputBase =
-    "w-full bg-[#060810] border border-[#1a2332] rounded-lg px-3.5 py-2.5 text-white font-mono text-xs placeholder:text-[#3d4a5c] outline-none transition-colors focus:border-cyan-400/40";
+    "w-full bg-surface border border-line rounded-lg px-3.5 py-2.5 text-white font-mono text-xs placeholder:text-faint outline-none transition-colors focus:border-primary/40";
 
   const fieldErr = (k: keyof FormState) =>
-    errors[k] ? <span className="font-mono text-[10px] text-red-400">{errors[k]}</span> : null;
+    errors[k] ? <span className="font-mono text-[11px] text-red-400">{errors[k]}</span> : null;
 
   const containerVariants: Variants = {
     hidden:   {},
@@ -130,11 +130,11 @@ async function handleSubmit() {
   };
 
   return (
-    <section id="contact" className="py-28 bg-[#0d1117]">
+    <section id="contact" className="py-28 bg-canvas">
       <div className="max-w-6xl mx-auto px-6">
 
         {/* divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent mb-14" />
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent mb-14" />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
@@ -151,7 +151,7 @@ async function handleSubmit() {
             </motion.div>
 
             <motion.p variants={itemVariants}
-              className="font-mono text-sm text-[#8b949e] leading-relaxed mb-10 max-w-sm"
+              className="font-mono text-sm text-muted leading-relaxed mb-10 max-w-sm"
             >
               Hai un progetto in mente o vuoi semplicemente fare due chiacchiere?
               Scrivimi — rispondo sempre entro 24h.
@@ -167,7 +167,7 @@ async function handleSubmit() {
             href="https://instagram.com/chrix_pookielifter"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-cyan-400 hover:underline"
+            className="text-primary hover:underline"
           >
             @chrix_pookielifter
           </a>
@@ -196,7 +196,7 @@ async function handleSubmit() {
                         href="https://github.com/ChrisRedBeard"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-cyan-400 hover:underline">
+                        className="text-primary hover:underline">
                       ChrisRedBeard
                       </a>
                   }
@@ -217,7 +217,7 @@ async function handleSubmit() {
                         href="https://www.linkedin.com/in/christian-barbarossa-447625245/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-cyan-400 hover:underline">
+                        className="text-primary hover:underline">
 
                         Christian Barbarossa
                       </a>
@@ -237,11 +237,11 @@ async function handleSubmit() {
 
             {/* status */}
             <motion.div variants={itemVariants}
-              className="flex items-center gap-2 font-mono text-[11px] text-green-400"
+              className="flex items-center gap-2 font-mono text-[11px] text-secondary"
             >
               <span className="relative flex h-[7px] w-[7px]">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-50" />
-                <span className="relative inline-flex rounded-full h-[7px] w-[7px] bg-green-400" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-50" />
+                <span className="relative inline-flex rounded-full h-[7px] w-[7px] bg-secondary" />
               </span>
               open to work
             </motion.div>
@@ -264,14 +264,14 @@ async function handleSubmit() {
                   className="flex flex-col gap-4"
                 >
                   {/* nome + email */}
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="flex flex-col gap-1.5">
-                      <label className="font-mono text-[9px] text-cyan-400 tracking-[1.5px] uppercase">nome</label>
+                      <label className="font-mono text-[11px] text-primary tracking-[1.5px] uppercase">nome</label>
                       <input type="text" placeholder="Mario Rossi" value={form.name} onChange={set("name")} className={inputBase} />
                       {fieldErr("name")}
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="font-mono text-[9px] text-cyan-400 tracking-[1.5px] uppercase">email</label>
+                      <label className="font-mono text-[11px] text-primary tracking-[1.5px] uppercase">email</label>
                       <input type="email" placeholder="mario@email.com" value={form.email} onChange={set("email")} className={inputBase} />
                       {fieldErr("email")}
                     </div>
@@ -279,17 +279,17 @@ async function handleSubmit() {
 
                   {/* argomento */}
                   <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[9px] text-cyan-400 tracking-[1.5px] uppercase">argomento</label>
+                    <label className="font-mono text-[11px] text-primary tracking-[1.5px] uppercase">argomento</label>
                     <div className="flex flex-wrap gap-2">
                       {SUBJECTS.map(s => (
                         <button
                           key={s} type="button"
                           onClick={() => setForm(f => ({ ...f, subject: s }))}
                           className={`
-                            font-mono text-[10px] px-3 py-1 rounded border transition-all
+                            font-mono text-[11px] px-3 py-1 rounded border transition-all
                             ${form.subject === s
-                              ? "border-cyan-400/35 bg-cyan-400/5 text-cyan-400"
-                              : "border-[#1a2332] bg-[#060810] text-[#8b949e] hover:border-cyan-400/20 hover:text-cyan-400/70"}
+                              ? "border-primary/35 bg-primary/5 text-primary"
+                              : "border-line bg-surface text-muted hover:border-primary/20 hover:text-primary/70"}
                           `}
                         >
                           {s}
@@ -300,7 +300,7 @@ async function handleSubmit() {
 
                   {/* messaggio */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="font-mono text-[9px] text-cyan-400 tracking-[1.5px] uppercase">messaggio</label>
+                    <label className="font-mono text-[11px] text-primary tracking-[1.5px] uppercase">messaggio</label>
                     <textarea rows={5} placeholder="Ciao Chris, ho un'idea..." value={form.message} onChange={set("message")} className={inputBase} />
                     {fieldErr("message")}
                   </div>
@@ -314,18 +314,18 @@ async function handleSubmit() {
                     )}
                   <button
                     type="button" onClick={handleSubmit} disabled={loading}
-                    className="flex items-center justify-between bg-[#060810] border border-[#1a2332] rounded-lg px-4 py-3 hover:border-cyan-400/30 hover:bg-cyan-400/4 transition-all group disabled:opacity-50"
+                    className="flex items-center justify-between bg-surface border border-line rounded-lg px-4 py-3 hover:border-primary/30 hover:bg-primary/4 transition-all group disabled:opacity-50"
                   >
                     <span className="font-mono text-sm text-white">
                       {loading ? "invio in corso..." : "invia messaggio"}
                     </span>
-                    <span className="w-7 h-7 rounded-md border border-cyan-400/30 flex items-center justify-center group-hover:border-cyan-400/60 transition-colors">
+                    <span className="w-7 h-7 rounded-md border border-primary/30 flex items-center justify-center group-hover:border-primary/60 transition-colors">
                       {loading ? (
-                        <svg className="w-3 h-3 animate-spin text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
+                        <svg className="w-3 h-3 animate-spin text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
                           <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
                         </svg>
                       ) : (
-                        <svg className="w-3 h-3 stroke-cyan-400" viewBox="0 0 24 24" fill="none" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                        <svg className="w-3 h-3 stroke-primary" viewBox="0 0 24 24" fill="none" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                           <line x1="5" y1="12" x2="19" y2="12"/>
                           <polyline points="12 5 19 12 12 19"/>
                         </svg>
@@ -342,13 +342,13 @@ async function handleSubmit() {
                   transition={{ duration: 0.4 }}
                   className="flex flex-col items-center justify-center gap-4 py-20 text-center"
                 >
-                  <div className="w-12 h-12 rounded-full border border-green-400/40 flex items-center justify-center">
-                    <svg className="w-5 h-5 stroke-green-400" viewBox="0 0 24 24" fill="none" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                  <div className="w-12 h-12 rounded-full border border-secondary/40 flex items-center justify-center">
+                    <svg className="w-5 h-5 stroke-secondary" viewBox="0 0 24 24" fill="none" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"/>
                     </svg>
                   </div>
-                  <span className="font-mono text-sm text-green-400">Messaggio inviato!</span>
-                  <p className="font-mono text-xs text-[#8b949e]">Ti rispondo al più presto. Grazie per avermi scritto.</p>
+                  <span className="font-mono text-sm text-secondary">Messaggio inviato!</span>
+                  <p className="font-mono text-xs text-muted">Ti rispondo al più presto. Grazie per avermi scritto.</p>
                 </motion.div>
               )}
             </AnimatePresence>

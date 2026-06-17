@@ -36,16 +36,16 @@ export default function Navbar() {
       rounded-full
       backdrop-blur-2xl
       bg-white/10
-      border border-[#00FFFF]/40
-    shadow-[0_0_30px_rgba(139,92,246,0.3)]
+      border border-primary/40
+    shadow-[0_0_30px_rgba(34,211,238,0.25)]
       "
     >
 
         {/* Logo */}
         <a href="#hero" className="font-bold text-xl text-white hover:text-yellow-400 transition-colors">
-  <span className="bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">&lt;</span>
+  <span className="bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent">&lt;</span>
   ChrisDev
-  <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">/&gt;</span>
+  <span className="bg-gradient-to-r from-cyan-300 to-primary bg-clip-text text-transparent">/&gt;</span>
 </a>
 
 
@@ -129,13 +129,14 @@ export default function Navbar() {
             md:hidden
             mt-3
             rounded-2xl
-            backdrop-blur-xl
+            backdrop-blur-2xl
             bg-white/10
-            border border-white/20
+            border border-primary/40
+            shadow-[0_0_30px_rgba(34,211,238,0.25)]
             overflow-hidden
             "
           >
-            <div className="px-6 py-4 flex flex-col gap-4">
+            <div className="px-6 py-4 flex flex-col gap-4 font-mono">
 
               {NAV_LINKS.map((link) => (
                 <a
@@ -143,13 +144,32 @@ export default function Navbar() {
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
                   className="
+                  text-sm
                   text-gray-300
                   hover:text-cyan-300
                   transition-colors
+                  relative
+                  group
+                  w-fit
                   py-1
                   "
                 >
                   {link.label}
+
+                  {/* underline animation — come nel menu desktop */}
+                  <span
+                    className="
+                    absolute
+                    left-0
+                    -bottom-0.5
+                    w-0
+                    h-px
+                    bg-white
+                    transition-all
+                    duration-300
+                    group-hover:w-full
+                    "
+                  />
                 </a>
               ))}
 

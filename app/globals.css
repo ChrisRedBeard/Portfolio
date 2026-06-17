@@ -1,28 +1,47 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ──────────────────────────────────────────────────────────────
+   DESIGN TOKENS — unica fonte di verità.
+   Tailwind v4 genera da qui sia le utility (bg-canvas, text-muted,
+   text-primary, border-line, font-display, ...) sia le CSS variables
+   globali (--color-canvas, ...) usabili negli style inline.
+   ────────────────────────────────────────────────────────────── */
+@theme {
+  /* Tipografia */
+  --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains), ui-monospace, monospace;
+
+  /* Neutri — scala dal più scuro al più chiaro */
+  --color-canvas:    #06080f; /* sfondo pagina */
+  --color-surface:   #0d1117; /* card / sezioni rialzate */
+  --color-surface-2: #121b26; /* alternanza sezioni (più chiaro) */
+  --color-line:      #1f2935; /* bordi */
+  --color-faint:     #61708a; /* testo terziario (contrasto migliorato) */
+  --color-muted:     #9aa7b4; /* testo secondario (contrasto migliorato) */
+  --color-ink:       #e6edf3; /* testo primario */
+
+  /* Accenti — UNO primario + UNO per gli stati */
+  --color-primary:   #22d3ee; /* ciano — identità del brand */
+  --color-secondary: #34d399; /* verde — solo stati (disponibile/successo) */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  /* compensa la navbar fissa quando si salta a un'ancora */
+  scroll-padding-top: 6rem;
+  /* evita scroll orizzontale da glow/canvas che sbordano */
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  max-width: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::view-transition-old(root),

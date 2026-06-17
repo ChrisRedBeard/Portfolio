@@ -42,10 +42,10 @@ export default function Projects() {
   const rest      = projects.filter((p) => !p.featured);
 
   return (
-    <section id="projects" className="py-28 bg-[#060810]">
+    <section id="projects" className="py-28 bg-canvas">
       <div className="max-w-6xl mx-auto px-6">
 
-        <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent mb-16" />
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent mb-16" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -54,9 +54,9 @@ export default function Projects() {
           transition={{ duration: 0.6 }}
           className="mb-14"
         >
-          <h2 className="relative font-mono text-4xl md:text-5xl text-white">
+          <h2 className="relative font-display text-3xl sm:text-4xl md:text-5xl text-white">
       
-               <span className=" bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+               <span className=" bg-gradient-to-r from-primary to-cyan-300 bg-clip-text text-transparent">
                 03/
               </span>Progetti
           
@@ -79,19 +79,19 @@ export default function Projects() {
               <SpotlightCard spotlightColor="rgba(0,229,255,0.1)" className="h-full">
                 <div className="p-6 h-full flex flex-col gap-4">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-[#3d444d] text-xs">
+                    <span className="font-mono text-faint text-xs">
                       {String(project.id).padStart(2, "0")}
                     </span>
-                    <div className="flex gap-3 text-[#8b949e]">
+                    <div className="flex gap-3 text-muted">
                       {project.github && (
                         <a href={project.github} target="_blank" rel="noopener noreferrer"
-                          className="hover:text-blue-400 transition-colors" aria-label="GitHub">
+                          className="hover:text-cyan-300 transition-colors" aria-label="GitHub">
                           <GitHubIcon />
                         </a>
                       )}
                       {project.demo && (
                         <a href={project.demo} target="_blank" rel="noopener noreferrer"
-                          className="hover:text-blue-400 transition-colors" aria-label="Demo">
+                          className="hover:text-cyan-300 transition-colors" aria-label="Demo">
                           <ExternalLinkIcon />
                         </a>
                       )}
@@ -100,12 +100,12 @@ export default function Projects() {
 
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-white mb-2">{project.title}</h3>
-                    <p className="text-sm text-[#8b949e] leading-relaxed">{project.description}</p>
+                    <p className="text-sm text-muted leading-relaxed">{project.description}</p>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
                     {project.tech.map((t) => (
-                      <span key={t} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-cyan-400/5 border border-cyan-400/15 text-cyan-400/80">
+                      <span key={t} className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-primary/5 border border-primary/15 text-primary/80">
                         {t}
                       </span>
                     ))}
@@ -121,7 +121,7 @@ export default function Projects() {
           className="mt-10 text-center"
         >
           <a href="https://github.com/ChrisRedBeard" target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-mono text-sm text-[#8b949e] hover:text-cyan-400 transition-colors group">
+            className="inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-primary transition-colors group">
             Vedi tutti i repository su GitHub
             <span className="transition-transform group-hover:translate-x-1">→</span>
           </a>

@@ -8,6 +8,7 @@
 // ============================================
 
 import { useEffect, useRef, useState } from "react";
+import { useReducedEffects } from "@/lib/useReducedEffects";
 
 type State = "default" | "hovering" | "clicking";
 
@@ -47,6 +48,7 @@ function Arrow({ state }: { state: State }) {
 
 // ─── Cursore ─────────────────────────────────────────────────────────────────
 export default function Cursor() {
+  const reduced  = useReducedEffects();
   const mouse    = useRef({ x: -200, y: -200 });
   const spotPos  = useRef({ x: -200, y: -200 });
   const stateRef = useRef<State>("default");
@@ -56,6 +58,7 @@ export default function Cursor() {
   const [curState, setCurState] = useState<State>("default");
 
   useEffect(() => {
+    if (reduced) return;
     let raf: number;
 
     const onMove = (e: MouseEvent) => {
@@ -99,7 +102,7 @@ export default function Cursor() {
       document.removeEventListener("mouseover", onOver);
       document.removeEventListener("mouseout",  onOut);
     };
-  }, []);
+  }, [reduced]);
 
   // dimensioni e colore spotlight in base allo stato
   const spotSize =
@@ -120,6 +123,10 @@ export default function Cursor() {
     position:      "fixed",
     pointerEvents: "none",
   };
+
+  // Su touch / motion ridotto il cursore custom non ha senso: non renderizzare
+  // nulla ed evitare il loop rAF (vedi guard nell'effetto sopra).
+  if (reduced) return null;
 
   return (
     <>

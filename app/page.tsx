@@ -17,7 +17,7 @@ import Cursor from "@/directives/components/ui/Cursor";
 export default function Home() {
   return (
 
-    <main>
+    <main className="overflow-x-hidden">
       <Cursor/>
       <Navbar />
       <Hero />
