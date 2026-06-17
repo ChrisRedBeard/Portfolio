@@ -19,7 +19,7 @@
 //   2. Sostituisci il campo "emoji" con "logo: '/logos/nome-logo.svg'"
 //   3. Nel componente Collaborations.jsx, usa <img src={c.logo} /> invece di <span>{c.emoji}</span>
 
-export type CollaborationType = "Research" | "OpenSource" | "Team" | "Association";
+export type CollaborationType = "Research" | "OpenSource" | "Team" | "Association" | "Lab";
 
 export interface Collaboration {
   id: number;
@@ -35,12 +35,12 @@ export interface Collaboration {
 export const collaborations: Collaboration[] = [
   {
     id: 1,
-    name: "ALETHEIA Wellbeing Research Group",
+    name: "ALETHEIA Wellbeing Lab",
     role: "Developer",
     description:
-      "Supporto al gruppo di ricerca universitario ALETHEIA, focalizzato su wellbeing e tecnologie digitali. Sviluppo di prototipi software per esperimenti e analisi dati.",
+      "Laboratorio didattico universitario su wellbeing e tecnologie digitali. Sviluppo prototipi software a supporto delle attività e degli esperimenti.",
     emoji: "🔬",
-    type: "Team",
+    type: "Lab",
     url: "https://aletheialab.it/#hero",
     active: true,
   },
