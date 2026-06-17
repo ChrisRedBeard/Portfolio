@@ -1,4 +1,6 @@
+"use client";
 import { useRef, useEffect } from 'react';
+import { useReducedEffects } from '@/lib/useReducedEffects';
 
 const LetterGlitch = ({
   glitchColors = ["#ffae00", "#dc6161", "#d900ff"],
@@ -15,6 +17,7 @@ const LetterGlitch = ({
   smooth: boolean;
   characters: string;
 }) => {
+  const reduced = useReducedEffects();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationRef = useRef<number | null>(null);
   const letters = useRef<
@@ -191,8 +194,8 @@ const LetterGlitch = ({
     if (!canvas) return;
 
     context.current = canvas.getContext('2d');
-    resizeCanvas();
-    animate();
+    resizeCanvas();           // disegna comunque un frame statico
+    if (!reduced) animate();  // anima solo se non touch / motion ridotto
 
     let resizeTimeout: ReturnType<typeof setTimeout>;
 
@@ -201,7 +204,7 @@ const LetterGlitch = ({
       resizeTimeout = setTimeout(() => {
         cancelAnimationFrame(animationRef.current as number);
         resizeCanvas();
-        animate();
+        if (!reduced) animate();
       }, 100);
     };
 
@@ -212,7 +215,7 @@ const LetterGlitch = ({
       window.removeEventListener('resize', handleResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [glitchSpeed, smooth]);
+  }, [glitchSpeed, smooth, reduced]);
 
   return (
     <div className="relative w-full h-full bg-black overflow-hidden">

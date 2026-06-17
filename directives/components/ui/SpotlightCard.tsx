@@ -14,13 +14,14 @@ interface SpotlightCardProps {
 
 export default function SpotlightCard({
   children,
+  className = "",
 }: SpotlightCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const spotRef = useRef<HTMLDivElement>(null);
 
 
   return (
-    <ElectricBorder>
+    <ElectricBorder className={className}>
     <div
       ref={cardRef}
        >
