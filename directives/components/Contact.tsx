@@ -6,6 +6,10 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Variants } from "framer-motion";
+import { Turnstile } from "@marsidev/react-turnstile";
+
+// Site key Turnstile (pubblica). Override con NEXT_PUBLIC_TURNSTILE_SITE_KEY.
+const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "0x4AAAAAADn3AqUmyfdTJScq";
 
 // ─── Typewriter ───────────────────────────────────────────────────────────────
 const SEGMENTS = [
@@ -105,6 +109,8 @@ export default function Contact() {
   const [loading,   setLoading]   = useState(false);
   const [errors,    setErrors]    = useState<Partial<Record<keyof FormState, string>>>({});
   const [formError, setFormError] = useState<string | null>(null);
+  const [token,     setToken]     = useState<string | null>(null); // Turnstile
+  const [hp,        setHp]        = useState("");                    // honeypot
 
   const set = (key: keyof FormState) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -124,13 +130,17 @@ export default function Contact() {
     e.preventDefault();
     setFormError(null);
     if (!validate()) return;
+    if (!token) {
+      setFormError("Completa la verifica anti-bot e riprova.");
+      return;
+    }
     setLoading(true);
 
     try {
       const res  = await fetch("/api/contact", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(form),
+        body:    JSON.stringify({ ...form, turnstileToken: token, website: hp }),
       });
       const data = await res.json().catch(() => ({}));
 
@@ -330,6 +340,22 @@ export default function Contact() {
                     />
                     {fieldErr("message")}
                   </div>
+
+                  {/* honeypot anti-bot (nascosto agli umani) */}
+                  <input
+                    type="text" name="website" tabIndex={-1} autoComplete="off"
+                    value={hp} onChange={(e) => setHp(e.target.value)}
+                    className="hidden" aria-hidden="true"
+                  />
+
+                  {/* verifica anti-bot Turnstile */}
+                  <Turnstile
+                    siteKey={SITE_KEY}
+                    onSuccess={setToken}
+                    onExpire={() => setToken(null)}
+                    onError={() => setToken(null)}
+                    options={{ theme: "dark", size: "flexible" }}
+                  />
 
                   {/* errore generico (API / rete) */}
                   {formError && (

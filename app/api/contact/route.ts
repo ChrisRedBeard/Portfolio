@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { Resend } from "resend";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+// Destinatario dei messaggi (la tua casella). Override con CONTACT_TO_EMAIL.
+const TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? "chrisredbeard21@gmail.com";
 
-// ── Rate limiting ─────────────────────────────────────────────────────────────
-// NOTA: in-memory → su serverless (Vercel) è "best effort" perché ogni istanza
-// ha la sua Map. Per un limite affidabile servirebbe uno store condiviso (es. Upstash Redis).
+// Mittente: "onboarding@resend.dev" funziona senza dominio verificato
+// (consegna solo all'email del tuo account Resend). Per un mittente tuo,
+// verifica un dominio su Resend e cambia questo valore.
+const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>";
+
+// ── Rate limiting (in-memory, best effort su serverless) ──────────────────────
 const rateLimitMap = new Map<string, number[]>();
 
 function isRateLimited(ip: string): boolean {
@@ -16,118 +20,33 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-// ── Analisi spam con Claude ───────────────────────────────────────────────────
-interface Verdict {
-  spam:     boolean;
-  reason:   string;
-  priority: "high" | "medium" | "low";
-  summary:  string;
-}
-
-// Schema per lo structured output (garantisce JSON valido)
-const VERDICT_SCHEMA = {
-  type: "object",
-  additionalProperties: false,
-  properties: {
-    spam:     { type: "boolean" },
-    reason:   { type: "string" },
-    priority: { type: "string", enum: ["high", "medium", "low"] },
-    summary:  { type: "string" },
-  },
-  required: ["spam", "reason", "priority", "summary"],
-} as const;
-
-// Verdetto di riserva: se l'AI non risponde, il messaggio passa comunque (best effort).
-const FALLBACK: Verdict = {
-  spam:     false,
-  reason:   "analisi AI non disponibile",
-  priority: "medium",
-  summary:  "nuovo messaggio",
-};
-
-async function analyzeWithClaude(
-  name: string, email: string,
-  subject: string, message: string
-): Promise<Verdict> {
+// ── Verifica Cloudflare Turnstile (anti-bot, lato server) ─────────────────────
+async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
+  if (!token) return false;
   try {
-    // 👉 Per spendere molto meno usa "claude-haiku-4-5" al posto di "claude-opus-4-8".
-    const res = await anthropic.messages.create({
-      model: "claude-opus-4-8",
-      max_tokens: 200,
-      system:
-        `Sei un filtro spam per il portfolio di un developer.
-È SPAM se: promozioni, crypto, casinò, SEO, backlink, bot, richieste di soldi.
-NON è spam se: collaborazioni genuine, proposte progetto, domande tecniche.
-Compila: spam (bool), reason (motivazione breve in italiano),
-priority (high|medium|low), summary (max 8 parole).`,
-      messages: [
-        {
-          role: "user",
-          content: `Nome: ${name}\nEmail: ${email}\nArgomento: ${subject}\nMessaggio: ${message}`,
-        },
-      ],
-      output_config: { format: { type: "json_schema", schema: VERDICT_SCHEMA } },
-    });
-
-    const block = res.content.find(b => b.type === "text");
-    if (!block || block.type !== "text") return FALLBACK;
-    return JSON.parse(block.text) as Verdict;
-  } catch (err) {
-    // Lo spam-filter è "best effort": se Claude fallisce, NON blocchiamo il messaggio.
-    console.error("[contact] analisi Claude fallita:", err);
-    return FALLBACK;
-  }
-}
-
-// ── Telegram ──────────────────────────────────────────────────────────────────
-const EMOJI: Record<Verdict["priority"], string> = {
-  high: "🔴", medium: "🟡", low: "🟢",
-};
-
-async function sendToTelegram(
-  name: string, email: string,
-  subject: string, message: string,
-  v: Verdict
-): Promise<boolean> {
-  const text = `
-${EMOJI[v.priority]} <b>Nuovo messaggio</b> · <i>${v.summary}</i>
-
-👤 <b>Nome:</b> ${name}
-📧 <b>Email:</b> ${email}
-📌 <b>Argomento:</b> ${subject}
-📊 <b>Priorità:</b> ${v.priority.toUpperCase()}
-
-💬 <b>Messaggio:</b>
-${message}
-  `.trim();
-
-  try {
-    const r = await fetch(
-      `https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`,
+    const res = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
         method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({
-          chat_id:    process.env.TELEGRAM_CHAT_ID,
-          text,
-          parse_mode: "HTML",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body:    new URLSearchParams({
+          secret:   process.env.TURNSTILE_SECRET_KEY ?? "",
+          response: token,
+          remoteip: ip,
         }),
       }
     );
-    if (!r.ok) {
-      console.error("[contact] Telegram ha risposto", r.status, await r.text());
-      return false;
-    }
-    return true;
+    const data = (await res.json()) as { success?: boolean };
+    return data.success === true;
   } catch (err) {
-    console.error("[contact] invio Telegram fallito:", err);
+    console.error("[contact] verifica Turnstile fallita:", err);
     return false;
   }
 }
 
 // ── Handler ───────────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") ?? "unknown";
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
 
   if (isRateLimited(ip)) {
     return NextResponse.json(
@@ -136,11 +55,19 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { name?: string; email?: string; subject?: string; message?: string };
+  let body: {
+    name?: string; email?: string; subject?: string; message?: string;
+    turnstileToken?: string; website?: string;
+  };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Richiesta non valida." }, { status: 400 });
+  }
+
+  // Honeypot: campo nascosto "website" — se compilato è un bot. Risposta finta-ok.
+  if (body.website) {
+    return NextResponse.json({ ok: true });
   }
 
   const name    = body.name?.trim()    ?? "";
@@ -158,15 +85,52 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Messaggio troppo lungo." }, { status: 400 });
   }
 
-  const verdict = await analyzeWithClaude(name, email, subject, message);
-
-  if (verdict.spam) {
-    console.log(`[SPAM] ${email} — ${verdict.reason}`);
-    return NextResponse.json({ ok: true }); // silenzioso
+  // Verifica anti-bot: senza token valido la richiesta viene rifiutata.
+  if (!(await verifyTurnstile(body.turnstileToken ?? "", ip))) {
+    return NextResponse.json(
+      { error: "Verifica anti-bot non superata. Ricarica la pagina e riprova." },
+      { status: 400 }
+    );
   }
 
-  const delivered = await sendToTelegram(name, email, subject, message, verdict);
-  if (!delivered) {
+  // Oggetto su una sola riga (niente header injection).
+  const safeSubject = `[Portfolio] ${subject} — ${name}`.replace(/[\r\n]+/g, " ");
+
+  // Client Resend istanziato qui (non a livello modulo) così il build non
+  // fallisce quando la chiave non è ancora impostata.
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.error("[contact] RESEND_API_KEY mancante");
+    return NextResponse.json(
+      { error: "Servizio email non configurato." },
+      { status: 500 }
+    );
+  }
+  const resend = new Resend(apiKey);
+
+  try {
+    const { error } = await resend.emails.send({
+      from:    FROM_EMAIL,
+      to:      TO_EMAIL,
+      replyTo: email, // rispondi all'email → va direttamente al visitatore
+      subject: safeSubject,
+      text:
+        `Nuovo messaggio dal portfolio\n\n` +
+        `Nome: ${name}\n` +
+        `Email: ${email}\n` +
+        `Argomento: ${subject}\n\n` +
+        `${message}\n`,
+    });
+
+    if (error) {
+      console.error("[contact] Resend ha risposto errore:", error);
+      return NextResponse.json(
+        { error: "Invio non riuscito. Riprova o scrivimi via email." },
+        { status: 502 }
+      );
+    }
+  } catch (err) {
+    console.error("[contact] invio email fallito:", err);
     return NextResponse.json(
       { error: "Invio non riuscito. Riprova o scrivimi via email." },
       { status: 502 }
